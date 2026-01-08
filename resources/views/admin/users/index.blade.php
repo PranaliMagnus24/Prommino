@@ -31,7 +31,7 @@
                                 <th>NAME</th>
                                 <th>EMAIL</th>
                                 <th>PHONE NO</th>
-                                <th>SKILLS</th> <!-- Changed from GENDER to SKILLS -->
+                                <th>SKILLS</th>
                                 <th class="text-center">ACTION</th>
                             </tr>
                         </thead>
@@ -74,7 +74,7 @@
                     </table>
                 </div>
 
-                <!-- Footer with Pagination -->
+                <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="text-muted small">
                         Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of {{ $users->total() }} entries

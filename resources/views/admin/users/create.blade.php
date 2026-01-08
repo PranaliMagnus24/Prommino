@@ -152,7 +152,6 @@
 
                     </div>
 
-                    <!-- Buttons -->
                     <div class="d-flex align-items-center flex-wrap mt-4">
                         <div class="ms-auto">
                             <button type="button" class="btn btn-outline-secondary" id="prevBtn">

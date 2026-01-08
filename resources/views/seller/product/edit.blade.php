@@ -42,24 +42,28 @@
                         @foreach ($product->brands as $index => $brand)
                             <div class="brand-row mb-3 border p-3 rounded">
                                 <div class="row mb-3">
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <label class="form-label">Brand Name</label>
                                         <input type="text" class="form-control" name="brands[{{ $index }}][name]"
                                             value="{{ old('brands.' . $index . '.name', $brand->name) }}"
                                             placeholder="Brand Name">
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-5">
                                         <label class="form-label">Price</label>
                                         <input type="number" step="0.01" class="form-control"
                                             name="brands[{{ $index }}][price]"
                                             value="{{ old('brands.' . $index . '.price', $brand->price) }}"
                                             placeholder="Price">
                                     </div>
+                                    <div class="col-md-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
+                                    </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-12">
                                         <label class="form-label">Description</label>
-                                        <textarea class="form-control" name="brands[{{ $index }}][description]" rows="2" placeholder="Description">{{ old('brands.' . $index . '.description', $brand->description) }}</textarea>
+                                        <textarea class="form-control" name="brands[{{ $index }}][description]" rows="2"
+                                            placeholder="Description">{{ old('brands.' . $index . '.description', $brand->description) }}</textarea>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -73,9 +77,6 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-1 d-flex align-items-end">
-                                    <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
-                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -83,7 +84,6 @@
                         <i class="fas fa-plus"></i> Add New Brand
                     </button>
 
-                    <!-- Buttons -->
                     <div class="d-flex justify-content-end mt-4">
                         <button type="submit" class="btn btn-primary">
                             UPDATE PRODUCT
@@ -117,13 +117,16 @@
             row.className = 'brand-row mb-3 border p-3 rounded';
             row.innerHTML = `
                 <div class="row mb-3">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label class="form-label">Brand Name</label>
                         <input type="text" class="form-control" name="brands[${brandIndex}][name]" placeholder="Brand Name">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label class="form-label">Price</label>
                         <input type="number" step="0.01" class="form-control" name="brands[${brandIndex}][price]" placeholder="Price">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -137,9 +140,6 @@
                         <label class="form-label">Image</label>
                         <input type="file" class="form-control" name="brands[${brandIndex}][image]" accept="image/*">
                     </div>
-                </div>
-                <div class="col-md-1 d-flex align-items-end">
-                    <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
                 </div>
             `;
             container.appendChild(row);

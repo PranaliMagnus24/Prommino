@@ -7,12 +7,14 @@
             @endphp
             @if ($user && $user->role === 'admin')
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ route('users.index') }}"><i class="ri-file-list-2-line me-2"></i> Users</a>
+                    <a class="nav-link text-light" href="{{ route('users.index') }}"><i
+                            class="ri-file-list-2-line me-2"></i> Users</a>
                 </li>
             @endif
             @if (($user && $user->role === 'admin') || $user->role === 'seller')
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{{ route('products.index') }}"><i class="ri-shopping-cart-2-line me-2"></i>
+                    <a class="nav-link text-light" href="{{ url('/products') }}"><i
+                            class="ri-shopping-cart-2-line me-2"></i>
                         Products</a>
                 </li>
             @endif
@@ -33,6 +35,19 @@
                     <i class="ri-dashboard-line me-2"></i> Dashboard
                 </a>
             </li>
+            @if ($user && $user->role === 'admin')
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{{ route('users.index') }}"><i
+                            class="ri-file-list-2-line me-2"></i> Users</a>
+                </li>
+            @endif
+            @if (($user && $user->role === 'admin') || $user->role === 'seller')
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{{ url('/products') }}"><i
+                            class="ri-shopping-cart-2-line me-2"></i>
+                        Products</a>
+                </li>
+            @endif
         </ul>
     </div>
 </div>

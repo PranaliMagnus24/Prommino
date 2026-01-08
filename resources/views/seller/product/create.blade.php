@@ -74,7 +74,6 @@
                         <i class="fas fa-plus"></i> Add New Brand
                     </button>
 
-                    <!-- Buttons -->
                     <div class="text-center mt-4">
                         <button type="submit" class="btn btn-primary" style="width: 185px;">
                             CREATE PRODUCT
@@ -107,35 +106,31 @@
             const row = document.createElement('div');
             row.className = 'brand-row mb-3 border p-3 rounded';
             row.innerHTML = `
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="row mb-3">
+                    <div class="col-md-5">
                         <label class="form-label">Brand Name</label>
                         <input type="text" class="form-control" name="brands[${brandIndex}][name]" placeholder="Brand Name">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <label class="form-label">Price</label>
                         <input type="number" step="0.01" class="form-control" name="brands[${brandIndex}][price]" placeholder="Price">
                     </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-12">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
                         <label class="form-label">Description</label>
                         <textarea class="form-control" name="brands[${brandIndex}][description]" rows="2" placeholder="Description"></textarea>
                     </div>
-                        </div>
-                        <div class="row mb-3">
-                           <div class="col-12">
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12">
                         <label class="form-label">Image</label>
                         <input type="file" class="form-control" name="brands[${brandIndex}][image]" accept="image/*">
                     </div>
-                                </div>
-
-
-
-                    <div class="col-md-1 d-flex align-items-end">
-                        <button type="button" class="btn btn-outline-danger btn-sm remove-brand">×</button>
-                    </div>
-
+                </div>
             `;
             container.appendChild(row);
             brandIndex++;

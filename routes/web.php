@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 Route::middleware(['auth', 'verified'])->group(function () {
     // /UserController
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -29,6 +29,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+    Route::get('/products/{product}/preview-pdf', [ProductController::class, 'previewPdf'])->name('products.preview-pdf');
+    Route::get('/products/{product}/download-pdf', [ProductController::class, 'downloadPdf'])->name('products.download-pdf');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

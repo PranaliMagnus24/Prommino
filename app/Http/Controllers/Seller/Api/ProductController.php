@@ -8,6 +8,7 @@ use App\Models\Product;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class ProductController extends Controller
 {
@@ -23,43 +24,51 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'product_name' => 'required|string|max:255',
-            'product_description' => 'required|string',
-            'brands' => 'required|array|min:1',
-            'brands.*.name' => 'required|string|max:255',
-            'brands.*.description' => 'required|string',
-            'brands.*.price' => 'required|numeric|min:0',
-            'brands.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'product_name' => 'required|string|max:255',
+                'product_description' => 'required|string',
+                'brands' => 'required|array|min:1',
+                'brands.*.name' => 'required|string|max:255',
+                'brands.*.description' => 'required|string',
+                'brands.*.price' => 'required|numeric|min:0',
+                'brands.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
 
-        $product = Product::create([
-            'user_id' => Auth::id(),
-            'product_name' => $request->product_name,
-            'product_description' => $request->product_description,
-        ]);
+            $product = Product::create([
+                'user_id' => Auth::id(),
+                'product_name' => $request->product_name,
+                'product_description' => $request->product_description,
+            ]);
 
-        foreach ($request->brands as $brandData) {
-            $imagePath = null;
-            if (isset($brandData['image'])) {
-                $filename = time().'_'.$brandData['image']->getClientOriginalName();
-                $brandData['image']->move(public_path('upload/brand'), $filename);
-                $imagePath = 'upload/brand/'.$filename;
+            foreach ($request->brands as $brandData) {
+                $imagePath = null;
+                if (isset($brandData['image'])) {
+                    $filename = time().'_'.$brandData['image']->getClientOriginalName();
+                    $brandData['image']->move(public_path('upload/brand'), $filename);
+                    $imagePath = 'upload/brand/'.$filename;
+                }
+
+                Brand::create([
+                    'product_id' => $product->id,
+                    'name' => $brandData['name'],
+                    'description' => $brandData['description'],
+                    'price' => $brandData['price'],
+                    'image' => $imagePath,
+                ]);
             }
 
-            Brand::create([
-                'product_id' => $product->id,
-                'name' => $brandData['name'],
-                'description' => $brandData['description'],
-                'price' => $brandData['price'],
-                'image' => $imagePath,
-            ]);
-        }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $e->errors(),
+            ], 422);
 
-        return response()->json([
-            'message' => 'Product created successfully.',
-            'product' => $product->load('brands'),
-        ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Server error',
+            ], 500);
+        }
     }
 
     public function destroy(Product $product)
@@ -84,6 +93,10 @@ class ProductController extends Controller
 
         $pdf = Pdf::loadView('seller.product.pdf', compact('product', 'totalPrice'));
 
-        return $pdf->download('product_'.$product->id.'.pdf');
+        return response()->streamDownload(
+    fn () => print($pdf->output()),
+    'product_'.$product->id.'.pdf'
+);
+
     }
 }

@@ -94,10 +94,8 @@ class UserController extends Controller
             $user->update(['password' => Hash::make($request->password)]);
         }
 
-        // Delete existing skills
         $user->skills()->delete();
 
-        // Add new skills
         if ($request->skills) {
             foreach ($request->skills as $skillName) {
                 if ($skillName) {
@@ -116,7 +114,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::findOrFail($id);
-        $user->skills()->delete(); // Delete associated skills
+        $user->skills()->delete(); 
         $user->delete();
 
         return redirect()->route('users.index')

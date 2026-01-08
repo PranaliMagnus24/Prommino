@@ -15,7 +15,6 @@
         <div class="card border-0 shadow-sm">
             <div class="card-body">
 
-                <!-- Add Button -->
                 <div class="d-flex justify-content-end mb-3">
                     <a href="{{ route('products.create') }}" class="btn btn-success">
                         Add Product
@@ -52,6 +51,11 @@
                                             class="btn btn-sm btn-outline-primary" style="width: 50px;">
                                             <i class="ri-edit-line"></i>
                                         </a>
+                                        <button type="button" class="btn btn-sm btn-outline-info" style="width: 50px;"
+                                            data-bs-toggle="modal" data-bs-target="#pdfModal"
+                                            onclick="loadPdfPreview({{ $product->id }})">
+                                            <i class="ri-file-pdf-line"></i>
+                                        </button>
                                         <form action="{{ route('products.destroy', $product->id) }}" method="POST"
                                             class="d-inline">
                                             @csrf
@@ -72,7 +76,7 @@
                     </table>
                 </div>
 
-                <!-- Footer with Pagination -->
+                <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div class="text-muted small">
                         Showing {{ $products->firstItem() }} to {{ $products->lastItem() }} of {{ $products->total() }}
@@ -87,5 +91,34 @@
             </div>
         </div>
     </div>
+
+    <!-- PDF Preview Modal -->
+    <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pdfModalLabel">Product PDF Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <iframe id="pdfPreview" src="" width="100%" height="500px" style="border: none;"></iframe>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a id="downloadPdfBtn" href="" class="btn btn-primary" target="_blank">Download PDF</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loadPdfPreview(productId) {
+            const previewUrl = `/products/${productId}/preview-pdf`;
+            const downloadUrl = `/products/${productId}/download-pdf`;
+
+            document.getElementById('pdfPreview').src = previewUrl;
+            document.getElementById('downloadPdfBtn').href = downloadUrl;
+        }
+    </script>
 
 @endsection

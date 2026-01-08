@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Product;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,7 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::where('user_id', Auth::id())->with('brands')->paginate(10);
+        $query = Product::with('brands');
+
+        if (Auth::user()->role !== 'admin') {
+            $query->where('user_id', Auth::id());
+        }
+
+        $products = $query->paginate(10);
 
         return view('seller.product.index', compact('products'));
     }
@@ -62,7 +69,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        // Ensure the product belongs to the authenticated user
+        
         if ($product->user_id !== Auth::id()) {
             abort(403);
         }
@@ -74,7 +81,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        // Ensure the product belongs to the authenticated user
+
         if ($product->user_id !== Auth::id()) {
             abort(403);
         }
@@ -94,10 +101,10 @@ class ProductController extends Controller
             'product_description' => $request->product_description,
         ]);
 
-        // Delete existing brands
+
         $product->brands()->delete();
 
-        // Create new brands
+
         foreach ($request->brands as $brandData) {
             $imagePath = null;
             if (isset($brandData['image'])) {
@@ -120,7 +127,6 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        // Ensure the product belongs to the authenticated user
         if ($product->user_id !== Auth::id()) {
             abort(403);
         }
@@ -128,5 +134,29 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.');
+    }
+
+    public function previewPdf(Product $product)
+    {
+        if ($product->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $product->load('brands');
+
+        return view('seller.product.pdf', compact('product'));
+    }
+
+    public function downloadPdf(Product $product)
+    {
+        if ($product->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $product->load('brands');
+
+        $pdf = Pdf::loadView('seller.product.pdf', compact('product'));
+
+        return $pdf->download('product_'.$product->id.'.pdf');
     }
 }
