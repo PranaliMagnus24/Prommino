@@ -19,8 +19,8 @@ This Laravel application provides APIs for Admin and Seller functionalities.
 -   **Body**:
     ```json
     {
-        "email": "admin@example.com",
-        "password": "password"
+        "email": "admin@gmail.com",
+        "password": "12345678"
     }
     ```
 -   **Response**: Access token with user details
@@ -33,11 +33,11 @@ This Laravel application provides APIs for Admin and Seller functionalities.
     ```json
     {
         "name": "John Doe",
-        "email": "john@example.com",
+        "email": "john@gmail.com",
         "phone": "1234567890",
-        "country": "USA",
-        "state": "California",
-        "password": "password123",
+        "country": "India",
+        "state": "Maharashtra",
+        "password": "12345678",
         "skills": ["PHP", "Laravel"]
     }
     ```
@@ -56,8 +56,8 @@ This Laravel application provides APIs for Admin and Seller functionalities.
 -   **Body**:
     ```json
     {
-        "email": "seller@example.com",
-        "password": "password"
+        "email": "seller@gmail.com",
+        "password": "12345678"
     }
     ```
 -   **Response**: Access token with user details
